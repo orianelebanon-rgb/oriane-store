@@ -1,3 +1,4 @@
+
 /* ================= STATE ================= */
   // Paste your deployed Apps Script Web App URL here — it must end in /exec.
   // Deploy → Manage deployments → copy the "Web app" URL.
@@ -154,6 +155,18 @@
       document.getElementById('filtersBar').classList.toggle('open');
     });
 
+    // "All Brands" pills
+    document.getElementById('brandPills').addEventListener('click', function (e) {
+      var pill = e.target.closest('.brand-pill');
+      if (!pill) return;
+      var brand = pill.dataset.brand;
+      filters.brand = (filters.brand === brand) ? 'all' : brand;
+      document.getElementById('brandFilter').value = filters.brand;
+      renderBrandPills();
+      applyFiltersAndRender();
+      document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    });
+
     // Cart sidebar
     document.getElementById('cartBtn').addEventListener('click', function () { openSidebar('cart'); });
     document.getElementById('closeCart').addEventListener('click', function () { closeSidebar('cart'); });
@@ -244,7 +257,7 @@
     return sorted;
   }
 
-function effectivePrice(p) { return p.onSale ? p.salePrice : p.price; }
+  function effectivePrice(p) { return p.onSale ? p.salePrice : p.price; }
 
   function heartIcon(filled) {
     return '<svg viewBox="0 0 24 24" fill="' + (filled ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.5"><path d="M12 20.5s-7.5-4.6-10-9.3C.6 8 2 4.5 5.4 4c2-.3 3.9.6 5 2.2C11.5 4.6 13.4 3.7 15.4 4c3.4.5 4.8 4 3.4 7.2-2.5 4.7-10 9.3-10 9.3z"/></svg>';
@@ -462,9 +475,10 @@ function effectivePrice(p) { return p.onSale ? p.salePrice : p.price; }
     if (!p) return;
 
     var isWished = wishlist.indexOf(p.id) !== -1;
-   var priceHtml = p.onSale
+    var priceHtml = p.onSale
       ? '<span class="price-original">$' + p.price.toFixed(2) + '</span><span class="price-sale">$' + p.salePrice.toFixed(2) + '</span>'
       : '<span class="price-regular">$' + p.price.toFixed(2) + '</span>';
+
     document.getElementById('quickViewContent').innerHTML = '' +
       '<div class="qv-img"><img src="' + escapeHtml(p.image) + '" alt="' + escapeHtml(p.name) + '" onerror="this.src=\'https://placehold.co/500x500/efe1cb/5c3a21?text=No+Image\'"></div>' +
       '<div class="qv-info">' +
