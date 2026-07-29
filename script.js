@@ -244,12 +244,8 @@
     return sorted;
   }
 
-  function effectivePrice(p) { return p.onSale ? p.salePrice : p.price; }
+function effectivePrice(p) { return p.onSale ? p.salePrice : p.price; }
 
-  function salePercent(p) {
-    if (!p.onSale || !p.price) return 0;
-    return Math.round((1 - (p.salePrice / p.price)) * 100);
-  }
   function heartIcon(filled) {
     return '<svg viewBox="0 0 24 24" fill="' + (filled ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.5"><path d="M12 20.5s-7.5-4.6-10-9.3C.6 8 2 4.5 5.4 4c2-.3 3.9.6 5 2.2C11.5 4.6 13.4 3.7 15.4 4c3.4.5 4.8 4 3.4 7.2-2.5 4.7-10 9.3-10 9.3z"/></svg>';
   }
@@ -272,13 +268,12 @@
     var priceHtml = p.onSale
       ? '<span class="price-original">$' + p.price.toFixed(2) + '</span><span class="price-sale">$' + p.salePrice.toFixed(2) + '</span>'
       : '<span class="price-regular">$' + p.price.toFixed(2) + '</span>';
-    var saleBadgeHtml = p.onSale ? '<span class="sale-badge">-' + salePercent(p) + '%</span>' : '';
 
     return '' +
       '<div class="product-card" data-id="' + p.id + '">' +
         '<div class="product-img-wrap">' +
           '<img class="product-img" src="' + escapeHtml(p.image) + '" alt="' + escapeHtml(p.name) + '" onerror="this.src=\'https://placehold.co/400x400/efe1cb/5c3a21?text=No+Image\'">' +
-          saleBadgeHtml +
+          (p.onSale ? '<span class="sale-badge">Sale</span>' : '') +
           '<span class="stock-badge ' + (p.inStock ? '' : 'out') + '">' + (p.inStock ? 'In Stock' : 'Out of Stock') + '</span>' +
           '<button class="quick-view-btn" data-action="quick-view" data-id="' + p.id + '">Quick View</button>' +
           '<button class="wishlist-icon-btn ' + (isWished ? 'active' : '') + '" data-action="toggle-wishlist" data-id="' + p.id + '" title="Wishlist">' + heartIcon(isWished) + '</button>' +
@@ -468,9 +463,8 @@
 
     var isWished = wishlist.indexOf(p.id) !== -1;
    var priceHtml = p.onSale
-      ? '<span class="price-original">$' + p.price.toFixed(2) + '</span><span class="price-sale">$' + p.salePrice.toFixed(2) + '</span><span class="sale-badge" style="position:static;display:inline-block;margin-left:8px;">-' + salePercent(p) + '%</span>'
+      ? '<span class="price-original">$' + p.price.toFixed(2) + '</span><span class="price-sale">$' + p.salePrice.toFixed(2) + '</span>'
       : '<span class="price-regular">$' + p.price.toFixed(2) + '</span>';
-
     document.getElementById('quickViewContent').innerHTML = '' +
       '<div class="qv-img"><img src="' + escapeHtml(p.image) + '" alt="' + escapeHtml(p.name) + '" onerror="this.src=\'https://placehold.co/500x500/efe1cb/5c3a21?text=No+Image\'"></div>' +
       '<div class="qv-info">' +
